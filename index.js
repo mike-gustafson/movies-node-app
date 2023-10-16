@@ -3,7 +3,6 @@ const app = express(); // instance of the app
 const { add, subtract, multiply, divide} = require('./calculator.js')
 const fs = require('fs');
 
-
 // gets data from a local API on my network that returns a list of movies and writes it to the movie-list.txt file
 fetch(`http://192.168.10.35:7878/api/v3/movie?excludeLocalCovers=false&apikey=c1b1e0b465734da0940c91d7917a0a47
 `)
@@ -13,7 +12,7 @@ fetch(`http://192.168.10.35:7878/api/v3/movie?excludeLocalCovers=false&apikey=c1
             return response.json();
         })
         .then(data => {
-            fs.writeFile('movie-list.txt', JSON.stringify(data), err => {
+            fs.writeFile('movie-list.json', JSON.stringify(data), err => {
                 if(err) {
                     console.log("ERROR:", err);
                 }
@@ -86,7 +85,7 @@ app.get('/read', (req, res) => {
     // 1. grab the query string,
     let element = req.query.something; // 'story'
     // 2. pass the query string into the fs function
-    fs.readFile(`${element}.txt`, 'utf8', (error, data) => {
+    fs.readFile(`${element}.json`, 'utf8', (error, data) => {
         if (error) {
             return res.json({ message: 'There is an issue, try again later...'});
         } else {
