@@ -4,25 +4,25 @@ const { add, subtract, multiply, divide} = require('./calculator.js')
 const fs = require('fs');
 
 // gets data from a local API on my network that returns a list of movies and writes it to the movie-list.txt file
-fetch(`http://192.168.10.35:7878/api/v3/movie?excludeLocalCovers=false&apikey=c1b1e0b465734da0940c91d7917a0a47
-`)
-        .then(response => {
-            console.log('--- status ---');
-            console.log(response.status);
-            return response.json();
-        })
-        .then(data => {
-            fs.writeFile('movie-list.json', JSON.stringify(data), err => {
-                if(err) {
-                    console.log("ERROR:", err);
-                }
-            })
-        })        
-        .catch(error => {
-            console.log('---- error ----');
-            console.log(error);
-            console.log('---error end---')
-        })
+// fetch(`http://192.168.10.35:7878/api/v3/movie?excludeLocalCovers=false&apikey=c1b1e0b465734da0940c91d7917a0a47
+// `)
+//         .then(response => {
+//             console.log('--- status ---');
+//             console.log(response.status);
+//             return response.json();
+//         })
+//         .then(data => {
+//             fs.writeFile('movie-list.json', JSON.stringify(data), err => {
+//                 if(err) {
+//                     console.log("ERROR:", err);
+//                 }
+//             })
+//         })        
+//         .catch(error => {
+//             console.log('---- error ----');
+//             console.log(error);
+//             console.log('---error end---')
+//         })
 
 
 
