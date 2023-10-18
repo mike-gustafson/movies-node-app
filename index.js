@@ -1,6 +1,7 @@
 const express = require('express'); // third party mudule
 const app = express(); // instance of the app
-const { add, subtract, multiply, divide} = require('./calculator.js')
+const { add, subtract, multiply, divide } = require('./calculator.js')
+const {favMovie, favGenre} = require("./new-movie-list.js");
 const fs = require('fs');
 
 // gets data from a local API on my network that returns a list of movies and writes it to the movie-list.txt file
@@ -26,6 +27,7 @@ const fs = require('fs');
 
 
 
+
 app.get('/', (req, res) => {
     return res.json({ message: 'Welcome to my Node Movie app' });
 });
@@ -38,6 +40,41 @@ app.get('/Blu-Ray', (req, res) => {
     return res.json({ message: 'List of all Blu-Rays:' });
 });
 
+app.get('/favMovie/:string', (req, res) => {
+    let string = req.params.string;
+    let answer = favMovie(string) 
+    return res.json({ answer: answer })
+})
+
+app.get('/favGenre/:string', (req, res) => {
+    let string = req.params.string; 
+    let answer = favGenre(string); 
+    return res.json({ answer: answer })
+})
+
+app.get('/movie-years', (req, res) => {
+    fs.readFile('movie-list.json', 'utf8', (error, data) => {
+        if (error) {
+            console.error('Error reading the JSON file:', error);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        try {
+            const movieList = JSON.parse(data);
+            if (Array.isArray(movieList)) {
+                const years = movieList.map(movie => movie.year);
+                res.json(years);
+            } else {
+                console.error('Data is not in the expected format.');
+                res.status(500).send('Internal Server Error');
+            }
+        } catch (parseError) {
+            console.error('Error parsing data:', parseError);
+            res.status(500).send('Internal Server Error');
+        }
+    });
+});
 
 // ----------------------------------------------
 // example: localhost:8000/add/7/8
@@ -73,6 +110,7 @@ app.get('/divide/:num1/:num2', (req, res) => {
     return res.json({ answer: answer })
 })
 
+
 // using core modules and req.query
 
 // ----------------------------------------------
@@ -87,13 +125,15 @@ app.get('/read', (req, res) => {
     // 2. pass the query string into the fs function
     fs.readFile(`${element}.json`, 'utf8', (error, data) => {
         if (error) {
-            return res.json({ message: 'There is an issue, try again later...'});
+            return res.json({ message: 'There is an issue, try again later...' });
         } else {
             // 3. return data that comes from the txt file
-            return res.json({ message: data})
+            return res.json({ message: data })
         }
     });
 })
+
+
 
 // SETUP A PORT NUMBER, LISTEN FOR SERVER
 const PORT = process.env.PORT || 8000;
